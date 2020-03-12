@@ -20,6 +20,7 @@ class Player(object):
         # merken in welche Richtung wir schauen und ob wir überhaupt laufen.
         self.pos_x = 10*32
         self.pos_y = 13*32
+        self.pos_x_old = self.pos_x
         self.dir = 0
         self.walking = False
 
@@ -72,13 +73,13 @@ class Player(object):
             # x-Position der Spielfigur anpassen,
             # die Blickrichtung festlegen
             # und den Laufen-Zustand einschalten.
-            self.pos_x -= 1
+            self.pos_x -= 3
             self.dir = -1
             self.walking = True
 
         # Und nochmal für die rechte Pfeiltaste.
         if key == 'RIGHT':
-            self.pos_x += 1
+            self.pos_x += 3
             self.dir = 1
             self.walking = True
 
