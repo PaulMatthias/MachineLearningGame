@@ -6,6 +6,8 @@ import pygame
 # Unser Tilemap Modul
 import Tilemap
 
+import AutoInput
+
 # Überprüfen, ob die optionalen Text- und Sound-Module geladen werden konnten.
 if not pygame.font: print('Fehler pygame.font Modul konnte nicht geladen werden!')
 if not pygame.mixer: print('Fehler pygame.mixer Modul konnte nicht geladen werden!')
@@ -27,6 +29,8 @@ def main():
     # Wir erstellen eine Tilemap.
     map = Tilemap.Tilemap()
 
+    event = AutoInput.AutoInput()
+
     # Die Schleife, und damit unser Spiel, läuft solange running == True.
     running = True
     while running:
@@ -37,20 +41,9 @@ def main():
         # screen Surface mit Schwarz (RGB = 0, 0, 0) füllen.
         screen.fill((198, 209, 255))
 
-        # Alle aufgelaufenen Events holen und abarbeiten.
-        for event in pygame.event.get():
-            # Spiel beenden, wenn wir ein QUIT-Event finden.
-            if event.type == pygame.QUIT:
-                running = False
+        event.generateRandomKeyPress()
 
-            # Wir interessieren uns auch für "Taste gedrückt"-Events.
-            if event.type == pygame.KEYDOWN:
-                # Wenn Escape gedrückt wird posten wir ein QUIT-Event in Pygames Event-Warteschlange.
-                if event.key == pygame.K_ESCAPE:
-                    pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-                # Alle Tastendrücke auch der Tilemap mitteilen.
-                map.handle_input(event.key)
+        map.handle_input(event.key)
 
         if map.player.isjump:
             map.player.jump()

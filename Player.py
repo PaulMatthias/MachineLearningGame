@@ -68,7 +68,7 @@ class Player(object):
 
     def handle_input(self, key):
         # Linke Pfeiltaste wird gedrückt:
-        if key == pygame.K_LEFT:
+        if key == 'LEFT':
             # x-Position der Spielfigur anpassen,
             # die Blickrichtung festlegen
             # und den Laufen-Zustand einschalten.
@@ -77,11 +77,11 @@ class Player(object):
             self.walking = True
 
         # Und nochmal für die rechte Pfeiltaste.
-        if key == pygame.K_RIGHT:
+        if key == 'RIGHT':
             self.pos_x += 1
             self.dir = 1
             self.walking = True
 
-        if key == pygame.K_UP:
+        if key == 'UP':
             self.isjump = True
 
