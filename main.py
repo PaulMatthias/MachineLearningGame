@@ -11,11 +11,11 @@ if not pygame.font: print('Fehler pygame.font Modul konnte nicht geladen werden!
 if not pygame.mixer: print('Fehler pygame.mixer Modul konnte nicht geladen werden!')
 
 def main():
-    # Initialisieren aller Pygame-Module und 
+    # Initialisieren aller Pygame-Module und
     # Fenster erstellen (wir bekommen eine Surface, die den Bildschirm repräsentiert).
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
-    
+
     # Titel des Fensters setzen, Mauszeiger nicht verstecken und Tastendrücke wiederholt senden.
     pygame.display.set_caption("Pygame-Tutorial: Animation")
     pygame.mouse.set_visible(1)
@@ -23,10 +23,10 @@ def main():
 
     # Clock-Objekt erstellen, das wir benötigen, um die Framerate zu begrenzen.
     clock = pygame.time.Clock()
-    
+
     # Wir erstellen eine Tilemap.
     map = Tilemap.Tilemap()
-    
+
     # Die Schleife, und damit unser Spiel, läuft solange running == True.
     running = True
     while running:
@@ -42,19 +42,22 @@ def main():
             # Spiel beenden, wenn wir ein QUIT-Event finden.
             if event.type == pygame.QUIT:
                 running = False
-            
+
             # Wir interessieren uns auch für "Taste gedrückt"-Events.
             if event.type == pygame.KEYDOWN:
                 # Wenn Escape gedrückt wird posten wir ein QUIT-Event in Pygames Event-Warteschlange.
                 if event.key == pygame.K_ESCAPE:
                     pygame.event.post(pygame.event.Event(pygame.QUIT))
-                
+
                 # Alle Tastendrücke auch der Tilemap mitteilen.
                 map.handle_input(event.key)
-        
+
+        if map.player.isjump:
+            map.player.jump()
+
         # Die Tilemap auf die screen-Surface rendern.
         map.render(screen)
-        
+
         # Inhalt von screen anzeigen
         pygame.display.flip()
 
