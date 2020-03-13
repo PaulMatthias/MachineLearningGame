@@ -23,16 +23,19 @@ class DQNAgent(object):
         self.actual = []
         self.memory = []
 
-    def get_state(self, game, player, food):
+    def get_state(self, map):
 
+        player = map.player
+        #danger = [danger for tile in map.tiles if tile.isDeadly]
+        danger = map.hindernis
         state = [
             player.move_right,  # move left
             player.move_left,  # move right
             player.isjump,  # move up
-            danger.x < player.pos_x,  # food left
-            danger.x > player.pos_x,  # food right
-            danger.y < player.pos_y,  # food up
-            danger.y > player.pos_y  # food down
+            danger.pos_x < player.pos_x,  # food left
+            danger.pos_x > player.pos_x,  # food right
+            danger.pos_y < player.pos_y,  # food up
+            danger.pos_y > player.pos_y  # food down
             ]
 
         for i in range(len(state)):
@@ -48,7 +51,7 @@ class DQNAgent(object):
         if crash:
             self.reward = -10
             return self.reward
-        if player.x > player.x_old:
+        if player.pos_x > player.pos_x_old:
             self.reward = 10
         return self.reward
 

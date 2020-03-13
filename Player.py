@@ -3,6 +3,7 @@
 import pygame
 import Utils
 import Animation
+import numpy as np
 
 # Die Player Klasse verwendet zwei Animationen, um eine steuerbare Spielfigur dazustellen.
 class Player(object):
@@ -18,6 +19,8 @@ class Player(object):
 
         # Start-Position des Players festlegen und
         # merken in welche Richtung wir schauen und ob wir überhaupt laufen.
+        self.move_right = False
+        self.move_left = False
         self.pos_x = 10*32
         self.pos_y = 13*32
         self.pos_x_old = self.pos_x
@@ -67,22 +70,31 @@ class Player(object):
         self.walking = False
 
 
-    def handle_input(self, key):
+    def handle_input(self, move):
         # Linke Pfeiltaste wird gedrückt:
-        if key == 'LEFT':
+        print(move)
+        if np.array_equal(move ,[1, 0, 0]):
             # x-Position der Spielfigur anpassen,
             # die Blickrichtung festlegen
             # und den Laufen-Zustand einschalten.
+            print('right')
             self.pos_x -= 3
             self.dir = -1
             self.walking = True
+            self.move_left = True
+            self.move_right= False
 
         # Und nochmal für die rechte Pfeiltaste.
-        if key == 'RIGHT':
+        if np.array_equal(move ,[0, 1, 0]):
+            print('left')
             self.pos_x += 3
             self.dir = 1
             self.walking = True
+            self.move_left = False
+            self.move_right= True
 
-        if key == 'UP':
+        if np.array_equal(move ,[0, 0, 1]):
             self.isjump = True
+            self.move_left = False
+            self.move_right= False
 

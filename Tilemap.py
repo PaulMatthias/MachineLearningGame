@@ -74,5 +74,8 @@ class Tilemap(object):
 
 
     # Tastendrücke an den Player weiterreichen:
-    def handle_input(self, key):
-        self.player.handle_input(key)
+    def handle_input(self, move):
+        self.player.handle_input(move)
+
+    def collisionDetection(self):
+        return False

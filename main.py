@@ -1,5 +1,6 @@
 # Pygame Modul importieren.
 import pygame
+from random import randint
 # Unser Tilemap Modul
 import Tilemap
 import AutoInput
@@ -44,8 +45,9 @@ def main():
         while running:
             agent.epsilon = 80 - counter_games
             #get old state
-            state_old = agent.get_state(game, player1, food1)
+            state_old = agent.get_state(map)
             map.player.pos_x_old = map.player.pos_x
+            print(map.player.pos_x, map.player.pos_y)
 
             #perform random actions based on agent.epsilon, or choose the action
             if randint(0, 200) < agent.epsilon:
@@ -62,9 +64,7 @@ def main():
             # screen Surface mit Schwarz (RGB = 0, 0, 0) füllen.
             screen.fill((198, 209, 255))
 
-            event.generateRandomKeyPress()
-
-            map.handle_input(event.key)
+            map.handle_input(final_move)
 
             #continue jump animation after
             if map.player.isjump:
@@ -73,20 +73,23 @@ def main():
             # Die Tilemap auf die screen-Surface rendern.
             map.render(screen)
 
-            state_new = agent.get_state(game, player1, food1)
+            state_new = agent.get_state(map)
+
+            running = map.collisionDetection()
+
             #set treward for the new state
-            reward = agent.set_reward(player1, game.crash)
+            reward = agent.set_reward(map.player, running)
             #train short memory base on the new action and state
-            agent.train_short_memory(state_old, final_move, reward, state_new, game.crash)
+            agent.train_short_memory(state_old, final_move, reward, state_new, running)
 
             # Inhalt von screen anzeigen
             pygame.display.flip()
 
-        agent.remember(state_old, final_move, reward, state_new, game.crash)
-        record = get_record(game.score, record)
-        if display_option:
-            display(player1, food1, game, record)
-            pygame.time.wait(speed)
+        agent.remember(state_old, final_move, reward, state_new, running)
+        #record = get_record(map.player.pos_x, record)
+        #if display_option:
+        #    #display(player1, food1, game, record)
+        #    pygame.time.wait(speed)
 
         agent.replay_new(agent.memory)
         counter_games += 1
