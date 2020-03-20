@@ -5,6 +5,7 @@ import random
 import numpy as np
 import pandas as pd
 from operator import add
+import Hindernis
 
 
 class DQNAgent(object):
@@ -27,15 +28,19 @@ class DQNAgent(object):
 
         player = map.player
         #danger = [danger for tile in map.tiles if tile.isDeadly]
-        danger = map.hindernis
+        if map.isThereHindernis:
+            danger = map.hindernis
+        else:
+            danger = Hindernis.Hindernis(0,0,0)
+
         state = [
             player.move_right,  # move left
             player.move_left,  # move right
             player.isjump,  # move up
-            danger.pos_x < player.pos_x,  # food left
-            danger.pos_x > player.pos_x,  # food right
-            danger.pos_y < player.pos_y,  # food up
-            danger.pos_y > player.pos_y  # food down
+            danger.pos_x < player.pos_x,  # danger left
+            danger.pos_x > player.pos_x,  # danger right
+            danger.pos_y < player.pos_y,  # danger up
+            danger.pos_y > player.pos_y  # danger down
             ]
 
         for i in range(len(state)):
@@ -49,8 +54,10 @@ class DQNAgent(object):
     def set_reward(self, player, crash):
         self.reward = 0
         if crash:
-            self.reward = -10
+            self.reward = -200
             return self.reward
+        if player.pos_x < player.pos_x_old:
+            self.reward = -10
         if player.pos_x > player.pos_x_old:
             self.reward = 10
         return self.reward

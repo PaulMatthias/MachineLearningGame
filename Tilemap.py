@@ -4,6 +4,7 @@ import pygame
 import Tileset
 import Player
 import Hindernis
+from random import randint
 
 # Die Tilemap Klasse verwaltet die Tile-Daten, die das Aussehen der Karte beschreiben.
 class Tilemap(object):
@@ -43,7 +44,8 @@ class Tilemap(object):
         # Player-Objekt erstellen.
         self.player = Player.Player()
 
-        self.hindernis = Hindernis.Hindernis()
+        # Hindernis erstellen
+        self.isThereHindernis = False
 
 
     # Hier rendern wir den sichtbaren Teil der Karte.
@@ -72,10 +74,24 @@ class Tilemap(object):
         # Und zuletzt den Player rendern.
         self.player.render(screen)
 
+    def renderHindernis(self, screen, hindernis):
+        screen.blit(hindernis.image, (hindernis.pos_x, hindernis.pos_y))
+
+    def checkHindernisOnMap(self):
+        if self.hindernis.pos_x < self.player.pos_x:
+            self.isThereHindernis = False
+
+    def createNewHindernis(self):
+        #choose random height of hindernis
+        y = randint(0, 100)/100
+        self.hindernis = Hindernis.Hindernis(y*30*32, 416, -10)
 
     # Tastendrücke an den Player weiterreichen:
     def handle_input(self, move):
         self.player.handle_input(move)
 
     def collisionDetection(self):
+        if self.player.pos_x > self.hindernis.pos_x - 10 and self.player.pos_x < self.hindernis.pos_x + 10:
+            if self.player.pos_y > self.hindernis.pos_y - 5 and self.player.pos_y < self.hindernis.pos_y + 5:
+                return True
         return False

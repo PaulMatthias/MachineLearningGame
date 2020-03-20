@@ -72,12 +72,10 @@ class Player(object):
 
     def handle_input(self, move):
         # Linke Pfeiltaste wird gedrückt:
-        print(move)
         if np.array_equal(move ,[1, 0, 0]):
             # x-Position der Spielfigur anpassen,
             # die Blickrichtung festlegen
             # und den Laufen-Zustand einschalten.
-            print('right')
             self.pos_x -= 3
             self.dir = -1
             self.walking = True
@@ -86,8 +84,7 @@ class Player(object):
 
         # Und nochmal für die rechte Pfeiltaste.
         if np.array_equal(move ,[0, 1, 0]):
-            print('left')
-            self.pos_x += 3
+            self.pos_x = self.pos_x + 3
             self.dir = 1
             self.walking = True
             self.move_left = False
